@@ -1,5 +1,5 @@
 #include "raylib.h"
-
+// hi goixz this is my first game i made it in c++ using raylib
 #define MAX_BULLETS 50
 #define MAX_ENEMIES 3
 
