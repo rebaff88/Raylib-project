@@ -18,5 +18,8 @@
     <ClCompile Include="Raylib project.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="op.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
