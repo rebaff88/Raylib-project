@@ -1,5 +1,9 @@
+#include <cstdlib>
+#include <ctime>
 #include<raylib.h>  
 using namespace std;
+
+
 
 int main()
 {
@@ -38,10 +42,33 @@ int main()
 	int EnemyPostionY[MaxEnemies];//vertical postion
 	int EnemyShipSpeedArr[MaxEnemies]; // speed of each enemy ship
 	
+
+
+	const int MAX_BULLETS = 15;//max bullets fire in frame window at a time
+	int BulletPositionX[MAX_BULLETS];//horizontal postion of bullet upgrading
+	int BulletPositionY[MAX_BULLETS];//vertical position upgradation
+	int BulletActive[MAX_BULLETS];//bullet is moving or not 
+	int BulletInitializedIndex = 0;//a variable for loop to be targeted
+	int BulletSpeed = 9;
+	int WaitToFire = 0;//when the bullet will start to be fired
+	int WaitToFireTime = 10;//frames to when the next bullet is fired      [FAST SPEED]
+
+
+
+	while (BulletInitializedIndex < MAX_BULLETS)
+
+	{
+		BulletActive[BulletInitializedIndex] = 0;
+		BulletPositionX[BulletInitializedIndex] = 0;
+		BulletPositionY[BulletInitializedIndex] = 0;
+		BulletInitializedIndex++;
+	}
+
 	
 	
 	int i = 0;
 	while (i < MaxEnemies)    //respawning of enemies
+
 	{
 
 		EnemyPositionX[i] = GetRandomValue(50, WindowWidth - 50); //it is the safe zone
@@ -59,13 +86,103 @@ int main()
 	//as the game will proceed.
 
 
+	bool TheGameHasStarted = false; //the game has not started yet
+	while (!TheGameHasStarted && !WindowShouldClose())//the condition is defying
+		//ie the game is started
+
+	{
+		BeginDrawing();
+		ClearBackground(grey);
+		int starIndex;//creating some moving stars lol
+		const int NumberOfStars = 200;
+		int StarPositionX[NumberOfStars];//horizontal position
+		int StarPositionY[NumberOfStars];//vertical
+
+
+		while (starIndex < NumberOfStars)
+
+		{
+			DrawPixel(StarPositionX[starIndex], StarPositionY[starIndex], WHITE);
+			//using a raylib function and pasing parameters;
+
+			StarPositionY[starIndex] += StarPositionY[starIndex];//the star vertical position will
+			//get uopdated.
+			if (StarPositionY[starIndex] > WindowHieght)//out of screen. star has gone beyond 
+				//the window(downwards) ie hieght
+			{
+				StarPositionY[starIndex] = 0;//again the value will go to 0
+				//regenerating a star
+				StarPositionX[starIndex] = rand() % WindowWidth;
+
+			}
+
+			starIndex += starIndex;//for more stars upgradation
+		}
+
+
+		DrawText("Welcome!", WindowWidth / 2 - 180, WindowHieght / 2 - 80, 65, YELLOW);
+		DrawText("SpaceShooter..!", WindowWidth / 2 - 150, WindowHieght / 2 + 20, 50, SKYBLUE);
+		DrawText("Press Enter 2 Enter", WindowWidth / 2 - 200, WindowHieght / 2 + 70, 40, WHITE);
+		DrawText("USE Arrow Keys To move & Space Key to Sh**t!!", WindowWidth / 2 - 160, WindowHieght / 2 - 20, 40, YELLOW);
+
+
+
+		EndDrawing();
+
+
+		if (IsKeyPressed(KEY_ENTER))
+
+			TheGameHasStarted = true; //the bool will be true and the game will begin
+
+	}
+
 
 	while (WindowShouldClose() == false)
+    {
 		//again using function: will get detected if escape key is used or close icon
 		//game will be closed if it turns true
-	{
-		if (IsKeyDown(KEY_LEFT))//using a raylib funtion to check if left key is pressed
-			ShipW -= ShipSpeed;//the position of the ship will get updated to left side
+
+
+		if (WaitToFire > 0)
+        {
+			WaitToFire--;
+
+		}
+
+
+		if (IsKeyDown(KEY_SPACE) && WaitToFire == 0)
+        {
+			
+			
+			//iskeyfunction; represesnts continuous action
+			//key pressed + ready to fire(space ship)
+
+			int BulletIndexForLoop = 0;
+			while (BulletIndexForLoop < MAX_BULLETS)//maxbullets are 15;
+			{
+
+				if (!BulletActive[BulletIndexForLoop])//indirectingly; bullet is active=false
+				{
+
+					BulletActive[BulletIndexForLoop] = 1;//verifying bullet is flying in the air
+					//now for position check;
+					BulletPositionX[BulletIndexForLoop] = ShipWidth; //horizontal fire
+					BulletPositionY[BulletIndexForLoop] = ShipHieght - 21;//will fire a bit
+					//above the ship;
+					WaitToFire = WaitToFireTime;//the period for which the player fires a bullet to 
+					//the firing of the next bullet(reset) 
+					break;
+				}
+
+				BulletIndexForLoop++;
+			}
+
+
+		}
+
+
+			if (IsKeyDown(KEY_LEFT))//using a raylib funtion to check if left key is pressed
+				ShipW -= ShipSpeed;//the position of the ship will get updated to left side
 		if (IsKeyDown(KEY_RIGHT))//checking when the right arrow key is pressed
 			ShipW += ShipSpeed;//increment as to right>shipwidth
 
@@ -90,7 +207,7 @@ int main()
 
 
 
-		
+
 
 
 		EndDrawing();   //will end the black screen
@@ -103,6 +220,10 @@ int main()
 	CloseWindow();
 }
 
+		
+
+
+		
 /*//for enemies ship:
 		DrawRectangle(EnemyShipW - 18, EnemyShipH - 12, 36, 24, RED);
 		DrawCircle(EnemyShipW, EnemyShipH - 3, 8, YELLOW);
