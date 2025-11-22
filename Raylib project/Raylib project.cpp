@@ -42,9 +42,10 @@ int main()
 	int EnemyPostionY[MaxEnemies];//vertical postion
 	int EnemyShipSpeedArr[MaxEnemies]; // speed of each enemy ship
 	//for the ship of the enemies
-		int EnemyShipW = WindowWidth / 2; //750/2=375; again almost center of window
+	int EnemyShipW = WindowWidth / 2; //750/2=375; again almost center of window
 	int EnemyShipH = 60; //near to top of window
 	int EnemyShipSpeed = 2; //medium speed of the enemy ship
+	
 	
 
 
@@ -90,38 +91,61 @@ int main()
 	//as the game will proceed.
 
 
+	int starIndex = 0;//creating some moving stars lol
+	const int NumberOfStars = 200;
+	int StarPositionX[NumberOfStars];//horizontal position
+	int StarPositionY[NumberOfStars];//vertical
+
+	// Initialize star positions once (so stars have valid starting coordinates)
+	starIndex = 0;
+	while (starIndex < NumberOfStars)
+	{
+		StarPositionX[starIndex] = rand() % WindowWidth;
+		StarPositionY[starIndex] = rand() % WindowHieght;
+		starIndex++;
+	}
+
+
+
 	bool TheGameHasStarted = false; //the game has not started yet
 	while (!TheGameHasStarted && !WindowShouldClose())//the condition is defying
 		//ie the game is started
 
 	{
+
+
 		BeginDrawing();
 		ClearBackground(grey);
-		int starIndex;//creating some moving stars lol
-		const int NumberOfStars = 200;
-		int StarPositionX[NumberOfStars];//horizontal position
-		int StarPositionY[NumberOfStars];//vertical
 
+		
 
-		while (starIndex < NumberOfStars)
+		
 
+		// Draw and update stars (simple downward movement)
 		{
-			DrawPixel(StarPositionX[starIndex], StarPositionY[starIndex], WHITE);
-			//using a raylib function and pasing parameters;
-
-			StarPositionY[starIndex] += StarPositionY[starIndex];//the star vertical position will
-			//get uopdated.
-			if (StarPositionY[starIndex] > WindowHieght)//out of screen. star has gone beyond 
-				//the window(downwards) ie hieght
+			int starIndex = 0;
+			while (starIndex < NumberOfStars)
 			{
-				StarPositionY[starIndex] = 0;//again the value will go to 0
-				//regenerating a star
-				StarPositionX[starIndex] = rand() % WindowWidth;
+				DrawPixel(StarPositionX[starIndex], StarPositionY[starIndex], WHITE);
+				//using a raylib function and pasing parameters;
 
+				// Move star down by 1 pixel each frame
+				StarPositionY[starIndex] = StarPositionY[starIndex] + 1;
+
+				if (StarPositionY[starIndex] > WindowHieght)//out of screen. star has gone beyond 
+					//the window(downwards) ie hieght
+				{
+					StarPositionY[starIndex] = 0;//again the value will go to 0
+					//regenerating a star
+					StarPositionX[starIndex] = rand() % WindowWidth;
+				}
+
+				starIndex = starIndex + 1; // respawning next star
 			}
 
-			starIndex += starIndex;//for more stars upgradation
+
 		}
+
 
 
 		DrawText("Welcome!", WindowWidth / 2 - 180, WindowHieght / 2 - 80, 65, YELLOW);
