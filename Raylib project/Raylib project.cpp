@@ -41,6 +41,10 @@ int main()
 	int EnemyPositionX[MaxEnemies];//horizontal position
 	int EnemyPostionY[MaxEnemies];//vertical postion
 	int EnemyShipSpeedArr[MaxEnemies]; // speed of each enemy ship
+	//for the ship of the enemies
+		int EnemyShipW = WindowWidth / 2; //750/2=375; again almost center of window
+	int EnemyShipH = 60; //near to top of window
+	int EnemyShipSpeed = 2; //medium speed of the enemy ship
 	
 
 
@@ -207,12 +211,55 @@ int main()
 
 
 
+		int DrawBullets = 0;
+		while (DrawBullets < MAX_BULLETS)
+			//this loop will eal with the graphics of bullets
+		{
+
+			if (BulletActive[DrawBullets])
+				DrawCircle(BulletPositionX[DrawBullets], BulletPositionY[DrawBullets], 5, YELLOW);
+			DrawBullets++;
+
+		}
+
+
+		int DrawingOfEnemyShips = 0;//loop variable
+		while (DrawingOfEnemyShips < MaxEnemies)
+			//dealing with enemies graphics
+		{
+
+
+			DrawRectangle(EnemyShipW - 18, EnemyShipH - 12, 36, 24, RED);
+			DrawCircle(EnemyShipW, EnemyShipH - 3, 8, YELLOW);
+			DrawCircle(EnemyShipW - 15, EnemyShipH - 15, 6, MAROON);
+			DrawCircle(EnemyShipW + 15, EnemyShipH - 15, 6, MAROON);
+			DrawCircle(EnemyShipW - 25, EnemyShipH + 5, 7, MAROON);
+			DrawCircle(EnemyShipW + 25, EnemyShipH + 5, 7, MAROON);
+			DrawCircle(EnemyShipW - 8, EnemyShipH + 16, 6, ORANGE);
+			DrawCircle(EnemyShipW + 8, EnemyShipH + 16, 6, ORANGE);
+
+
+			EnemyShipW += EnemyShipSpeed;
+
+			if (EnemyShipH > WindowHieght)   // if enemy goes below the screen
+			{
+				EnemyShipH = -50;   // reset above the window
+				EnemyShipW = GetRandomValue(50, WindowWidth - 50);
+				// random new X position for variety
+			}
+
+
+			if (EnemyShipW < 20) EnemyShipW = 20;                     // left edge
+			if (EnemyShipW > WindowWidth - 20) EnemyShipW = WindowWidth - 20; // right edge
+
+			
+			DrawingOfEnemyShips++;
+		}
 
 
 
 		EndDrawing();   //will end the black screen
 	}
-
 
 
 	//the first thing we will do with the while loop is to check the events 
@@ -224,33 +271,3 @@ int main()
 
 
 		
-/*//for enemies ship:
-		DrawRectangle(EnemyShipW - 18, EnemyShipH - 12, 36, 24, RED);
-		DrawCircle(EnemyShipW, EnemyShipH - 3, 8, YELLOW);
-		DrawCircle(EnemyShipW - 15, EnemyShipH - 15, 6, MAROON);
-		DrawCircle(EnemyShipW + 15, EnemyShipH - 15, 6, MAROON);
-		DrawCircle(EnemyShipW - 25, EnemyShipH + 5, 7, MAROON);
-		DrawCircle(EnemyShipW + 25, EnemyShipH + 5, 7, MAROON);
-		DrawCircle(EnemyShipW - 8, EnemyShipH + 16, 6, ORANGE);
-		DrawCircle(EnemyShipW + 8, EnemyShipH + 16, 6, ORANGE);
-		
-
-		EnemyShipW += EnemyShipSpeed;
-
-		if (EnemyShipH > WindowHieght)   // if enemy goes below the screen
-		{
-			EnemyShipH = -50;   // reset above the window
-			EnemyShipW = GetRandomValue(50, WindowWidth - 50);
-			// random new X position for variety
-		}
-
-
-		if (EnemyShipW < 20) EnemyShipW = 20;                     // left edge
-		if (EnemyShipW > WindowWidth - 20) EnemyShipW = WindowWidth - 20; // right edge
-
-
-		for the ship of the enemies
-			int EnemyShipW = WindowWidth / 2; //750/2=375; again almost center of window
-			int EnemyShipH = 60; //near to top of window
-			int EnemyShipSpeed = 2; //medium speed of the enemy ship
-			*/
