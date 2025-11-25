@@ -1,4 +1,4 @@
-#include <cstdlib>
+﻿#include <cstdlib>
 #include <ctime>
 #include<raylib.h>  
 using namespace std;
@@ -7,7 +7,7 @@ using namespace std;
 
 int main()
 {
-	Color grey = { 22, 18, 27, 255 };
+	Color grey = { 8, 4, 35, 255 };
 	//here we have created a color variable using the structure Color,this will showcase
 	// grey color in the backgound.
 
@@ -45,8 +45,8 @@ int main()
 	int EnemyShipW = WindowWidth / 2; //750/2=375; again almost center of window
 	int EnemyShipH = 60; //near to top of window
 	int EnemyShipSpeed = 2; //medium speed of the enemy ship
-	
-	
+
+
 
 
 	const int MAX_BULLETS = 15;//max bullets fire in frame window at a time
@@ -69,8 +69,8 @@ int main()
 		BulletInitializedIndex++;
 	}
 
-	
-	
+
+
 	int i = 0;
 	while (i < MaxEnemies)    //respawning of enemies
 
@@ -106,6 +106,37 @@ int main()
 	}
 
 
+	//here i have initialized planats lol'
+	const int NumberOfPlanetsGoingToFall = 8;//the number of planets which are going to fall in the
+	//window frame
+	//now declaring the positions of the planets
+	// i randomly tossed positions for the plaets 
+	int PlanetPositionX[NumberOfPlanetsGoingToFall] = { 100, 400, 160, 206, 530, 605, 60, 76 };
+	//horizontal
+	int PlanetPositionY[NumberOfPlanetsGoingToFall] = { -100, -200, -150, -150, -250, -300, -100, 345};
+	//vertical positions
+	//now i am going for the radius of the planets 
+	int PlanetRadius[NumberOfPlanetsGoingToFall] = { 30, 50, 38, 45, 35, 26, 14, 10 };//radius of the
+	//8 planets some are very big, medium and very small
+	//now i am going for speed of the planets iam have folowed the same pattern(random)
+	//now for speed and colors;
+	int PlanetFallingSpeed[NumberOfPlanetsGoingToFall] = { 2, 4, 1, 3, 2, 6, 5, 6 };
+	//as it will have three layesr so: 
+	Color PlanetFirstColor[NumberOfPlanetsGoingToFall] = { BLUE, RED, GOLD, GREEN, PURPLE, ORANGE, PINK, BROWN };
+	Color PlanetSecondColors[NumberOfPlanetsGoingToFall] = { DARKBLUE, MAROON, ORANGE, DARKGREEN, MAGENTA, BROWN, GOLD, ORANGE };
+	Color PlanetThirdColors[NumberOfPlanetsGoingToFall] = { BLUE, PINK, YELLOW, LIME, VIOLET, BEIGE, YELLOW, YELLOW };
+
+
+	const int SUNPlanet = 1;
+	//for sun in the center
+	int SUNPlanetPositionX[SUNPlanet] = { 350 };
+	int SUNPlanetPositionY[SUNPlanet] = { -500 };
+	int SUNPlanetRadius[SUNPlanet] = { 60 };
+	Color SUNPlanetFirstColor[SUNPlanet] = { YELLOW };
+	Color SUNPlanetSecondColors[SUNPlanet] = { ORANGE };
+	Color SUNPlanetThirdColors[SUNPlanet] = { GOLD };
+
+
 
 	bool TheGameHasStarted = false; //the game has not started yet
 	while (!TheGameHasStarted && !WindowShouldClose())//the condition is defying
@@ -117,9 +148,9 @@ int main()
 		BeginDrawing();
 		ClearBackground(grey);
 
-		
 
-		
+
+
 
 		// Draw and update stars (simple downward movement)
 		{
@@ -148,6 +179,32 @@ int main()
 
 
 
+		//here i am going to use a for loop to draw the planets and make them fall
+		for (int PlanetForLoop = 0; PlanetForLoop < NumberOfPlanetsGoingToFall; PlanetForLoop++)
+		{//for the first layer:
+			DrawCircle(PlanetPositionX[PlanetForLoop], PlanetPositionY[PlanetForLoop], PlanetRadius[PlanetForLoop], PlanetFirstColor[PlanetForLoop]);
+
+			//for the second layer
+			DrawCircle(PlanetPositionX[PlanetForLoop], PlanetPositionY[PlanetForLoop], PlanetRadius[PlanetForLoop] * 0.7, PlanetSecondColors[PlanetForLoop]);
+
+			//for the third loop
+			DrawCircle(PlanetPositionX[PlanetForLoop], PlanetPositionY[PlanetForLoop], PlanetRadius[PlanetForLoop] * 0.4, PlanetThirdColors[PlanetForLoop]);
+
+
+			PlanetPositionY[PlanetForLoop] += PlanetFallingSpeed[PlanetForLoop]; //as if the planets move down
+			//wrds they will cover more distance vertically from the top lol
+
+			if (PlanetPositionY[PlanetForLoop] - PlanetRadius[PlanetForLoop] > WindowHieght)//of course it 
+				//should be in the frame window ie hieght
+				PlanetPositionY[PlanetForLoop] = -PlanetRadius[PlanetForLoop] - 50;
+		}
+		
+
+
+
+
+
+
 		DrawText("Welcome!", WindowWidth / 2 - 180, WindowHieght / 2 - 80, 65, YELLOW);
 		DrawText("SpaceShooter..!", WindowWidth / 2 - 150, WindowHieght / 2 + 20, 50, SKYBLUE);
 		DrawText("Press Enter 2 Enter", WindowWidth / 2 - 200, WindowHieght / 2 + 70, 40, WHITE);
@@ -166,51 +223,128 @@ int main()
 
 
 	while (WindowShouldClose() == false)
-    {
+	{
 		//again using function: will get detected if escape key is used or close icon
 		//game will be closed if it turns true
 
 
-		if (WaitToFire > 0)
-        {
-			WaitToFire--;
-
-		}
-
-
-		if (IsKeyDown(KEY_SPACE) && WaitToFire == 0)
-        {
-			
-			
-			//iskeyfunction; represesnts continuous action
-			//key pressed + ready to fire(space ship)
-
-			int BulletIndexForLoop = 0;
-			while (BulletIndexForLoop < MAX_BULLETS)//maxbullets are 15;
+		// Draw and update stars (simple downward movement)
+		{
+			int starIndex = 0;
+			while (starIndex < NumberOfStars)
 			{
+				DrawPixel(StarPositionX[starIndex], StarPositionY[starIndex], WHITE);
+				//using a raylib function and pasing parameters;
 
-				if (!BulletActive[BulletIndexForLoop])//indirectingly; bullet is active=false
+				// Move star down by 1 pixel each frame
+				StarPositionY[starIndex] = StarPositionY[starIndex] + 1;
+
+				if (StarPositionY[starIndex] > WindowHieght)//out of screen. star has gone beyond 
+					//the window(downwards) ie hieght
 				{
-
-					BulletActive[BulletIndexForLoop] = 1;//verifying bullet is flying in the air
-					//now for position check;
-					BulletPositionX[BulletIndexForLoop] = ShipWidth; //horizontal fire
-					BulletPositionY[BulletIndexForLoop] = ShipHieght - 21;//will fire a bit
-					//above the ship;
-					WaitToFire = WaitToFireTime;//the period for which the player fires a bullet to 
-					//the firing of the next bullet(reset) 
-					break;
+					StarPositionY[starIndex] = 0;//again the value will go to 0
+					//regenerating a star
+					StarPositionX[starIndex] = rand() % WindowWidth;
 				}
 
-				BulletIndexForLoop++;
+				starIndex = starIndex + 1; // respawning next star
 			}
 
 
 		}
 
 
-			if (IsKeyDown(KEY_LEFT))//using a raylib funtion to check if left key is pressed
-				ShipW -= ShipSpeed;//the position of the ship will get updated to left side
+// here i am going to repaste the code for planets i have made using a loop above: 
+		//here i am going to use a for loop to draw the planets and make them fall
+		for (int PlanetForLoop = 0; PlanetForLoop < NumberOfPlanetsGoingToFall; PlanetForLoop++)
+		{//for the first layer:
+			DrawCircle(PlanetPositionX[PlanetForLoop], PlanetPositionY[PlanetForLoop], PlanetRadius[PlanetForLoop], PlanetFirstColor[PlanetForLoop]);
+
+			//for the second layer
+			DrawCircle(PlanetPositionX[PlanetForLoop], PlanetPositionY[PlanetForLoop], PlanetRadius[PlanetForLoop] * 0.7, PlanetSecondColors[PlanetForLoop]);
+
+			//for the third loop
+			DrawCircle(PlanetPositionX[PlanetForLoop], PlanetPositionY[PlanetForLoop], PlanetRadius[PlanetForLoop] * 0.4, PlanetThirdColors[PlanetForLoop]);
+
+
+			PlanetPositionY[PlanetForLoop] += PlanetFallingSpeed[PlanetForLoop]; //as if the planets move down
+			//wrds they will cover more distance vertically from the top lol
+
+			if (PlanetPositionY[PlanetForLoop] - PlanetRadius[PlanetForLoop] > WindowHieght)//of course it 
+				//should be in the frame window ie hieght
+				PlanetPositionY[PlanetForLoop] = -PlanetRadius[PlanetForLoop] - 50;
+		}
+
+
+		for (int SUNPlanetForLoop = 0; SUNPlanetForLoop < NumberOfPlanetsGoingToFall; SUNPlanetForLoop++)
+		{//for the first layer:
+			DrawCircle(PlanetPositionX[SUNPlanetForLoop], PlanetPositionY[SUNPlanetForLoop], PlanetRadius[SUNPlanetForLoop], PlanetFirstColor[SUNPlanetForLoop]);
+		//for the second layer
+			DrawCircle(PlanetPositionX[SUNPlanetForLoop], PlanetPositionY[SUNPlanetForLoop], PlanetRadius[SUNPlanetForLoop] * 0.7, PlanetSecondColors[SUNPlanetForLoop]);
+			//for the third loop
+			DrawCircle(PlanetPositionX[SUNPlanetForLoop], PlanetPositionY[SUNPlanetForLoop], PlanetRadius[SUNPlanetForLoop] * 0.4, PlanetThirdColors[SUNPlanetForLoop]);
+		
+
+			PlanetPositionY[SUNPlanetForLoop] += PlanetFallingSpeed[SUNPlanetForLoop]; //as if the planets move down
+			//wrds they will cover more distance vertically from the top lol
+
+			if (PlanetPositionY[SUNPlanetForLoop] - PlanetRadius[SUNPlanetForLoop] > WindowHieght)//of course it 
+				//should be in the frame window ie hieght
+				PlanetPositionY[SUNPlanetForLoop] = -PlanetRadius[SUNPlanetForLoop] - 50;
+		}
+
+
+
+
+
+		int BulletIndexForTheLoopUse = 0;
+		while (BulletIndexForTheLoopUse < MAX_BULLETS) //maxbullets are 15;
+		{
+			if (!BulletActive[BulletIndexForTheLoopUse]) //bullet is inactive → use it
+			{
+				BulletActive[BulletIndexForTheLoopUse] = 1; //the bullet has now bacame active
+				BulletPositionX[BulletIndexForTheLoopUse] = ShipW; //correct horizontal fire
+
+				BulletPositionY[BulletIndexForTheLoopUse] = ShipHieght - 21; //vertical fire position
+				WaitToFire = WaitToFireTime; //reset cooldown
+				break;
+			}
+
+			BulletIndexForTheLoopUse++;
+		}
+
+
+
+
+
+
+
+
+
+
+
+		if (WaitToFire > 0)
+		{
+			WaitToFire--;
+
+		}
+
+
+		if (IsKeyDown(KEY_SPACE) && WaitToFire == 0)
+		{
+
+
+			//iskeyfunction; represesnts continuous action
+			//key pressed + ready to fire(space ship)
+
+
+
+
+		}
+
+
+		if (IsKeyDown(KEY_LEFT))//using a raylib funtion to check if left key is pressed
+			ShipW -= ShipSpeed;//the position of the ship will get updated to left side
 		if (IsKeyDown(KEY_RIGHT))//checking when the right arrow key is pressed
 			ShipW += ShipSpeed;//increment as to right>shipwidth
 
@@ -235,6 +369,7 @@ int main()
 
 
 
+		//now drawing bullets
 		int DrawBullets = 0;
 		while (DrawBullets < MAX_BULLETS)
 			//this loop will eal with the graphics of bullets
@@ -276,7 +411,7 @@ int main()
 			if (EnemyShipW < 20) EnemyShipW = 20;                     // left edge
 			if (EnemyShipW > WindowWidth - 20) EnemyShipW = WindowWidth - 20; // right edge
 
-			
+
 			DrawingOfEnemyShips++;
 		}
 
@@ -291,7 +426,6 @@ int main()
 	CloseWindow();
 }
 
-		
 
 
-		
+
