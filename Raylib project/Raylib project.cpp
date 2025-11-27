@@ -39,23 +39,14 @@ void DemonstrateGraphics()
 
 
 
-	//multiple enemies
-	const int MaxEnemies = 5; //defining a constant variable for maximum enemies at atime on window
-	int EnemyPositionX[MaxEnemies];//horizontal position
-	int EnemyPostionY[MaxEnemies];//vertical postion
-	int EnemyShipSpeedArr[MaxEnemies]; // speed of each enemy ship
-	//for the ship of the enemies
-	int EnemyShipW = WindowWidth / 2; //750/2=375; again almost center of window
-	int EnemyShipH = 60; //near to top of window
-	int EnemyShipSpeed = 2; //medium speed of the enemy ship
 
 
 
 
-	const int MAX_BULLETS = 15;//max bullets fire in frame window at a time
-	int BulletPositionX[MAX_BULLETS];//horizontal postion of bullet upgrading
-	int BulletPositionY[MAX_BULLETS];//vertical position upgradation
-	int BulletActive[MAX_BULLETS];//bullet is moving or not 
+	const int MaxBulletsToBeFired = 15;//max bullets fire in frame window at a time
+	int BulletPositionX[MaxBulletsToBeFired];//horizontal postion of bullet upgrading
+	int BulletPositionY[MaxBulletsToBeFired];//vertical position upgradation
+	int BulletActiveOnTheWindow[MaxBulletsToBeFired];//bullet is moving or not 
 	int BulletInitializedIndex = 0;//a variable for loop to be targeted
 	int BulletSpeed = 9;
 	int WaitToFire = 0;//when the bullet will start to be fired
@@ -63,10 +54,10 @@ void DemonstrateGraphics()
 
 
 
-	while (BulletInitializedIndex < MAX_BULLETS)
+	while (BulletInitializedIndex < MaxBulletsToBeFired)
 
 	{
-		BulletActive[BulletInitializedIndex] = 0;
+		BulletActiveOnTheWindow[BulletInitializedIndex] = 0;
 		BulletPositionX[BulletInitializedIndex] = 0;
 		BulletPositionY[BulletInitializedIndex] = 0;
 		BulletInitializedIndex++;
@@ -74,24 +65,10 @@ void DemonstrateGraphics()
 
 
 
-	int i = 0;
-	while (i < MaxEnemies)    //respawning of enemies
-
-	{
-
-		EnemyPositionX[i] = GetRandomValue(50, WindowWidth - 50); //it is the safe zone
-		//otherwise the enemy spaceships will either get out of the screen or can be spawned at 
-		//left or right side of the window
-		EnemyPostionY[i] = GetRandomValue(-300, -60);//verticaly spawning
-		EnemyShipSpeedArr[i] = GetRandomValue(2, 4);//speed is fluctuating some will be very fast
-		//some will be moderate
-		i++;
-	}
+	
 
 
-
-	int score = 0;//score for the player ship will always start from 0 and will increase
-	//as the game will proceed.
+	
 
 
 	int starIndex = 0;//creating some moving stars lol
@@ -301,11 +278,11 @@ void DemonstrateGraphics()
 
 
 		int BulletIndexForTheLoopUse = 0;
-		while (BulletIndexForTheLoopUse < MAX_BULLETS) //maxbullets are 15;
+		while (BulletIndexForTheLoopUse < MaxBulletsToBeFired) //maxbullets are 15;
 		{
-			if (!BulletActive[BulletIndexForTheLoopUse]) //bullet is inactive → use it
+			if (!BulletActiveOnTheWindow[BulletIndexForTheLoopUse]) //bullet is inactive → use it
 			{
-				BulletActive[BulletIndexForTheLoopUse] = 1; //the bullet has now bacame active
+				BulletActiveOnTheWindow[BulletIndexForTheLoopUse] = 1; //the bullet has now bacame active
 				BulletPositionX[BulletIndexForTheLoopUse] = ShipW; //correct horizontal fire
 
 				BulletPositionY[BulletIndexForTheLoopUse] = ShipHieght - 21; //vertical fire position
@@ -374,49 +351,18 @@ void DemonstrateGraphics()
 
 		//now drawing bullets
 		int DrawBullets = 0;
-		while (DrawBullets < MAX_BULLETS)
+		while (DrawBullets < MaxBulletsToBeFired)
 			//this loop will eal with the graphics of bullets
 		{
 
-			if (BulletActive[DrawBullets])
+			if (BulletActiveOnTheWindow[DrawBullets])
 				DrawCircle(BulletPositionX[DrawBullets], BulletPositionY[DrawBullets], 5, YELLOW);
 			DrawBullets++;
 
 		}
 
 
-		int DrawingOfEnemyShips = 0;//loop variable
-		while (DrawingOfEnemyShips < MaxEnemies)
-			//dealing with enemies graphics
-		{
-
-
-			DrawRectangle(EnemyShipW - 18, EnemyShipH - 12, 36, 24, RED);
-			DrawCircle(EnemyShipW, EnemyShipH - 3, 8, YELLOW);
-			DrawCircle(EnemyShipW - 15, EnemyShipH - 15, 6, MAROON);
-			DrawCircle(EnemyShipW + 15, EnemyShipH - 15, 6, MAROON);
-			DrawCircle(EnemyShipW - 25, EnemyShipH + 5, 7, MAROON);
-			DrawCircle(EnemyShipW + 25, EnemyShipH + 5, 7, MAROON);
-			DrawCircle(EnemyShipW - 8, EnemyShipH + 16, 6, ORANGE);
-			DrawCircle(EnemyShipW + 8, EnemyShipH + 16, 6, ORANGE);
-
-
-			EnemyShipW += EnemyShipSpeed;
-
-			if (EnemyShipH > WindowHieght)   // if enemy goes below the screen
-			{
-				EnemyShipH = -50;   // reset above the window
-				EnemyShipW = GetRandomValue(50, WindowWidth - 50);
-				// random new X position for variety
-			}
-
-
-			if (EnemyShipW < 20) EnemyShipW = 20;                     // left edge
-			if (EnemyShipW > WindowWidth - 20) EnemyShipW = WindowWidth - 20; // right edge
-
-
-			DrawingOfEnemyShips++;
-		}
+		
 
 
 
