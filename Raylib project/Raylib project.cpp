@@ -1,9 +1,12 @@
-﻿#include<iostream>
+﻿#include<fstream>
+#include<string>
+#include<iostream>
 #include<stdio.h>
 #include <cstdlib>
 #include <ctime>
 #include <raylib.h>  
-#include <random> 
+#include <random>
+
 using namespace std;
 //you are going to view our final programming fundamentals group project
 
@@ -179,8 +182,8 @@ void DemonstrateGraphics()
 		DrawText("Welcome!", WindowWidth / 2 - 180, WindowHieght / 2 - 80, 65, YELLOW);
 		DrawText("SpaceShooter..!", WindowWidth / 2 - 150, WindowHieght / 2 + 20, 50, SKYBLUE);
 		DrawText("Press Enter 2 Enter", WindowWidth / 2 - 200, WindowHieght / 2 + 70, 40, WHITE);
-		DrawText("USE Arrow Keys To move & Space Key to Sh**t!!", WindowWidth / 2 - 160, WindowHieght / 2 - 20, 40, YELLOW);
-
+		DrawText("USE Arrow Keys To move\nSpace Key to Sh**t!!", WindowWidth / 2 - 160, WindowHieght / 2 - 20, 40, YELLOW);
+		
 
 
 
@@ -404,16 +407,57 @@ void DemonstrateGraphics()
 
 
 
-int main()
+int main();
 {
+
+	string file_name = "highscores.txt";
+
+	string new_name;
+	int new_score;
+
+	cout << "Enter your name: ";
+	cin >> new_name;
+
+	cout << "Enter your score: ";
+	cin >> new_score;
+
+	ofstream fout(file_name, ios::app); // append mode
+	fout << new_name << "," << new_score << "\n";
+	fout.close();
+
+	ifstream fin(file_name);
+
+	string line;
+	string highest_name = "";
+	int highest_score = -1;
+
+	while (getline(fin, line))
+	{
+		int comma_pos = line.find(',');
+
+		if (comma_pos == string::npos)
+			continue;   //if comma is not found
+
+		string name = line.substr(0, comma_pos);
+		int score = stoi(line.substr(comma_pos + 1));
+		if (score > highest_score)
+		{
+			highest_score = score;
+			highest_name = name;
+		}
+	}
+
+	fin.close();
+
+	cout << "\nHIGHEST SCORE\n";
+	cout << "Name: " << highest_name << endl;
+	cout << "Score: " << highest_score << endl;
+
 
 
 	DemonstrateGraphics();
+	
 
-
-
-
-
-	return 0;
+	//return 0;
 }
 
