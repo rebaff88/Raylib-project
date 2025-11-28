@@ -1,6 +1,6 @@
-﻿#include<fstream>
+﻿#include<iostream>
+#include<fstream>
 #include<string>
-#include<iostream>
 #include<stdio.h>
 #include <cstdlib>
 #include <ctime>
@@ -182,7 +182,7 @@ void DemonstrateGraphics()
 		DrawText("Welcome!", WindowWidth / 2 - 180, WindowHieght / 2 - 80, 65, YELLOW);
 		DrawText("SpaceShooter..!", WindowWidth / 2 - 150, WindowHieght / 2 + 20, 50, SKYBLUE);
 		DrawText("Press Enter 2 Enter", WindowWidth / 2 - 200, WindowHieght / 2 + 70, 40, WHITE);
-		DrawText("USE Arrow Keys To move\nSpace Key to Sh**t!!", WindowWidth / 2 - 160, WindowHieght / 2 - 20, 40, YELLOW);
+		DrawText("USE Arrow Keys & Space Key!", WindowWidth / 2 - 160, WindowHieght / 2 - 20, 40, YELLOW);
 		
 
 
@@ -393,7 +393,7 @@ void DemonstrateGraphics()
 		{
 			DrawText("GAME OVER!", WindowWidth / 2 - 150, WindowHieght / 2 - 20, 50, RED);
 
-
+		}
 
 
 		EndDrawing();
@@ -407,9 +407,8 @@ void DemonstrateGraphics()
 
 
 
-int main();
+int main()
 {
-
 	string file_name = "highscores.txt";
 
 	string new_name;
@@ -452,9 +451,7 @@ int main();
 	cout << "\nHIGHEST SCORE\n";
 	cout << "Name: " << highest_name << endl;
 	cout << "Score: " << highest_score << endl;
-
-
-
+	
 	DemonstrateGraphics();
 	
 
