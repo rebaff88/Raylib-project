@@ -89,7 +89,7 @@ void DemonstrateGraphics()
 
     bool StartGame = false;
 
-    // Initial start/main screen
+    // Initial start screen
     while (!StartGame && !WindowShouldClose())
     {
         BeginDrawing();
@@ -118,7 +118,7 @@ void DemonstrateGraphics()
             continue;
         }
 
-        //ship movement
+        // Input for ship movement
         if (IsKeyDown(KEY_RIGHT) || IsKeyDown(KEY_D))
         {
             ShipW += ShipSpeed;
@@ -250,7 +250,7 @@ void DemonstrateGraphics()
         // Draw health
         DrawText(TextFormat("Health: %d", PlayerHealth), 10, 10, 20, WHITE);
 
-        // make game over message appear if health is zero
+        // Draw game over message if health is zero
         if (PlayerHealth <= 0)
         {
             DrawText("GAME OVER!", WindowWidth / 2 - 150, WindowHieght / 2 - 20, 50, RED);
