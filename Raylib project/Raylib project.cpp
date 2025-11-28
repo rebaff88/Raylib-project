@@ -2,7 +2,9 @@
 #include <ctime>
 #include <raylib.h>  
 #include <random> 
+
 using namespace std;
+
 //you are going to view our final programming fundamentals group project
 
 void DemonstrateGraphics()
@@ -25,13 +27,13 @@ void DemonstrateGraphics()
     //loop will run 50 times per second
 
     //for space ship 
-    int ShipW = WindowWidth / 2; //almost center of window
-    int ShipH = WindowHieght - 60; //near to bottom of window
+    int ShipW = WindowWidth / 2; //750/2=375; almost center of window
+    int ShipH = WindowHieght - 60; //700-60=640; near to bottom of window
     int ShipWidth = 40;
     int ShipHieght = 50;
     int ShipSpeed = 5; //much fast
     int ShipALive = 5; //health of player(lives)
-    const int MaxHealth = 5; //max health of player(it will remain same to the end of the code)
+    const int MaxHealth = 5; //max health of player(it will remain same to the end of the code
 
     //now i am going for bullets:
     const int MaximumNumOfBullets = 15;//max bullets fire in frame window at a time
@@ -67,10 +69,10 @@ void DemonstrateGraphics()
     }
 
     //here i have initialized planats lol'
-    const int NumberOfPlanetsGoingToFall = 8;//the number of planets which are going to fall in the window frame
+    const int NumberOfPlanetsGoingToFall = 8;//the number of planets which are going to fall in the
     int PlanetPositionX[NumberOfPlanetsGoingToFall] = { 100, 400, 160, 206, 530, 605, 60, 76 };
     int PlanetPositionY[NumberOfPlanetsGoingToFall] = { -100, -200, -150, -150, -250, -300, -100, 345 };
-    int PlanetRadius[NumberOfPlanetsGoingToFall] = { 30, 50, 38, 45, 35, 26, 14, 10 };//radius of the planets
+    int PlanetRadius[NumberOfPlanetsGoingToFall] = { 30, 50, 38, 45, 35, 26, 14, 10 };//radius of the
     int PlanetFallingSpeed[NumberOfPlanetsGoingToFall] = { 2, 4, 1, 3, 2, 6, 5, 6 };
     Color PlanetFirstColor[NumberOfPlanetsGoingToFall] = { BLUE, RED, GOLD, GREEN, PURPLE, ORANGE, PINK, BROWN };
     Color PlanetSecondColors[NumberOfPlanetsGoingToFall] = { DARKBLUE, MAROON, ORANGE, DARKGREEN, MAGENTA, BROWN, GOLD, ORANGE };
@@ -85,8 +87,9 @@ void DemonstrateGraphics()
     Color SUNPlanetThirdColors[SUNPlanet] = { GOLD };
 
     bool TheGameHasStarted = false; //the game has not started yet
+    bool GameOver = false;
 
-    // --- Enemy variables ---
+    // Declare enemy variables outside main loop to persist across frames
     const int MaxEnemies = 10;
     int EnemyPosX[MaxEnemies];
     int EnemyPosY[MaxEnemies];
@@ -94,9 +97,8 @@ void DemonstrateGraphics()
     bool EnemyActive[MaxEnemies];
 
     int Score = 0;
-    bool GameOver = false;
 
-    // Initialize enemies
+    // Initialize enemies once
     for (int i = 0; i < MaxEnemies; i++) {
         EnemyActive[i] = false;
         EnemyPosX[i] = rand() % (WindowWidth - 40);
@@ -104,13 +106,12 @@ void DemonstrateGraphics()
         EnemySpeed[i] = 2 + rand() % 3; // speed 2-4
     }
 
-    // --- Main start ---
-    while (!TheGameHasStarted && !WindowShouldClose())//the condition is defying
+    // --- Start Screen Loop ---
+    while (!TheGameHasStarted && !WindowShouldClose())
     {
         BeginDrawing();
         ClearBackground(grey);
 
-        // Draw stars
         {
             int starIndex = 0;
             while (starIndex < NumberOfStars)
@@ -126,12 +127,13 @@ void DemonstrateGraphics()
             }
         }
 
-        // Draw planets
+        // Draw planets and make them fall
         for (int PlanetForLoop = 0; PlanetForLoop < NumberOfPlanetsGoingToFall; PlanetForLoop++)
         {
             DrawCircle(PlanetPositionX[PlanetForLoop], PlanetPositionY[PlanetForLoop], PlanetRadius[PlanetForLoop], PlanetFirstColor[PlanetForLoop]);
             DrawCircle(PlanetPositionX[PlanetForLoop], PlanetPositionY[PlanetForLoop], PlanetRadius[PlanetForLoop] * 0.7, PlanetSecondColors[PlanetForLoop]);
             DrawCircle(PlanetPositionX[PlanetForLoop], PlanetPositionY[PlanetForLoop], PlanetRadius[PlanetForLoop] * 0.4, PlanetThirdColors[PlanetForLoop]);
+
             PlanetPositionY[PlanetForLoop] += PlanetFallingSpeed[PlanetForLoop];
 
             if (PlanetPositionY[PlanetForLoop] - PlanetRadius[PlanetForLoop] > WindowHieght)
@@ -146,16 +148,19 @@ void DemonstrateGraphics()
         EndDrawing();
 
         if (IsKeyPressed(KEY_ENTER))
-            TheGameHasStarted = true; //the bool will be true and the game will begin
+            TheGameHasStarted = true; // the bool will be true and the game will begin
     }
 
-    // --- Main game loop ---
+    // --- Main Game Loop ---
     while (WindowShouldClose() == false)
     {
-        if (!GameOver) {
-            // Spawn enemies if less than MaxEnemies active
-            for (int i = 0; i < MaxEnemies; i++) {
-                if (!EnemyActive[i]) {
+        if (!GameOver && TheGameHasStarted)
+        {
+            // --- spawn enemies if less than max ---
+            for (int i = 0; i < MaxEnemies; i++)
+            {
+                if (!EnemyActive[i])
+                {
                     EnemyActive[i] = true;
                     EnemyPosX[i] = rand() % (WindowWidth - 40);
                     EnemyPosY[i] = -50; // start above the screen
@@ -163,157 +168,28 @@ void DemonstrateGraphics()
                 }
             }
 
-            // Move enemies and check collisions
-            for (int i = 0; i < MaxEnemies; i++) {
-                if (EnemyActive[i]) {
+            // --- move enemies and check collisions ---
+            for (int i = 0; i < MaxEnemies; i++)
+            {
+                if (EnemyActive[i])
+                {
                     EnemyPosY[i] += EnemySpeed[i];
 
                     // Check collision with ship
-                    if (EnemyPosY[i] + 30 > ShipH && EnemyPosY[i] < ShipH + 50 &&
-                        EnemyPosX[i] + 30 > ShipW && EnemyPosX[i] < ShipW + ShipWidth) {
-                        GameOver = true; // enemy hit the ship
+                    if (EnemyPosY[i] + 30 > ShipH && EnemyPosY[i] < ShipH + ShipHieght &&
+                        EnemyPosX[i] + 30 > ShipW && EnemyPosX[i] < ShipW + ShipWidth)
+                    {
+                        GameOver = true;
                     }
 
                     // Check collision with bullets
-                    for (int j = 0; j < MaximumNumOfBullets; j++) {
-                        if (BulletActive[j]) {
-                            if (BulletPositionY[j] - 5 < EnemyPosY[i] + 15 && BulletPositionY[j] + 5 > EnemyPosY[i] &&
-                                BulletPositionX[j] > EnemyPosX[i] && BulletPositionX[j] < EnemyPosX[i] + 30) {
-                                // Enemy hit
-                                EnemyActive[i] = false;
-                                BulletActive[j] = false;
-                                Score += 10; // increase score
-                            }
-                        }
-                    }
-
-                    // Remove enemies that go out of screen
-                    if (EnemyPosY[i] > WindowHieght + 50) {
-                        EnemyActive[i] = false;
-                    }
-                }
-            }
-
-            // Draw enemies
-            for (int i = 0; i < MaxEnemies; i++) {
-                if (EnemyActive[i]) {
-                    DrawCircle(EnemyPosX[i], EnemyPosY[i], 15, RED);
-                }
-            }
-
-            // Display score
-            DrawText(TextFormat("Score: %d", Score), 20, 20, 30, WHITE);
-        }
-
-        // Draw ship
-        DrawRectangle(ShipW - 15, ShipH - 10, 30, 20, BLUE); // main body
-        DrawCircle(ShipW, ShipH - 5, 7, BLUE); // cockpit
-        DrawCircle(ShipW - 20, ShipH + 5, 6, DARKBLUE); // wing left
-        DrawCircle(ShipW + 20, ShipH + 5, 6, DARKBLUE); // wing right
-        DrawCircle(ShipW - 7, ShipH + 12, 5, ORANGE); // engine left
-        DrawCircle(ShipW + 7, ShipH + 12, 5, ORANGE); // engine right
-
-        // Bullets
-        if (IsKeyDown(KEY_SPACE) && WaitToFire >= WaitToFireTime)
-        {
-            for (int i = 0; i < MaximumNumOfBullets; i++)
-            {
-                if (!BulletActive[i])
-                {
-                    BulletPositionX[i] = ShipW; // center of ship
-                    BulletPositionY[i] = ShipH;
-                    BulletActive[i] = true;
-                    WaitToFire = 0; // reset cooldown
-                    break;
-                }
-            }
-        }
-        WaitToFire++;
-
-        for (int i = 0; i < MaximumNumOfBullets; i++)
-        {
-            if (BulletActive[i])
-            {
-                BulletPositionY[i] -= BulletSpeed; // move up
-                if (BulletPositionY[i] < 0)
-                    BulletActive[i] = false;
-            }
-        }
-
-        // Update star positions
-        {
-            int starIndex = 0;
-            while (starIndex < NumberOfStars)
-            {
-                DrawPixel(StarPositionX[starIndex], StarPositionY[starIndex], WHITE);
-                StarPositionY[starIndex] += 1;
-                if (StarPositionY[starIndex] > WindowHieght)
-                {
-                    StarPositionY[starIndex] = 0;
-                    StarPositionX[starIndex] = rand() % WindowWidth;
-                }
-                starIndex++;
-            }
-        }
-
-        // Draw planets
-        for (int PlanetForLoop = 0; PlanetForLoop < NumberOfPlanetsGoingToFall; PlanetForLoop++)
-        {
-            DrawCircle(PlanetPositionX[PlanetForLoop], PlanetPositionY[PlanetForLoop], PlanetRadius[PlanetForLoop], PlanetFirstColor[PlanetForLoop]);
-            DrawCircle(PlanetPositionX[PlanetForLoop], PlanetPositionY[PlanetForLoop], PlanetRadius[PlanetForLoop] * 0.7, PlanetSecondColors[PlanetForLoop]);
-            DrawCircle(PlanetPositionX[PlanetForLoop], PlanetPositionY[PlanetForLoop], PlanetRadius[PlanetForLoop] * 0.4, PlanetThirdColors[PlanetForLoop]);
-            PlanetPositionY[PlanetForLoop] += PlanetFallingSpeed[PlanetForLoop];
-
-            if (PlanetPositionY[PlanetForLoop] - PlanetRadius[PlanetForLoop] > WindowHieght)
-                PlanetPositionY[PlanetForLoop] = -PlanetRadius[PlanetForLoop] - 50;
-        }
-
-        // Move planets
-        for (int PlanetForLoop = 0; PlanetForLoop < NumberOfPlanetsGoingToFall; PlanetForLoop++) {
-            PlanetPositionY[PlanetForLoop] += PlanetFallingSpeed[PlanetForLoop];
-            if (PlanetPositionY[PlanetForLoop] - PlanetRadius[PlanetForLoop] > WindowHieght)
-                PlanetPositionY[PlanetForLoop] = -PlanetRadius[PlanetForLoop] - 50;
-        }
-
-        // Ship movement
-        if (IsKeyDown(KEY_RIGHT) || IsKeyDown(KEY_D))
-            ShipW += ShipSpeed;
-        if (IsKeyDown(KEY_LEFT) || IsKeyDown(KEY_A))
-            ShipW -= ShipSpeed;
-
-        // Keep ship within bounds
-        if (ShipW < 20) ShipW = 20;
-        if (ShipW > WindowWidth - 20) ShipW = WindowWidth - 20;
-
-        // --- Enemy logic ---
-        if (!GameOver) {
-            // Spawn enemies
-            for (int i = 0; i < MaxEnemies; i++) {
-                if (!EnemyActive[i]) {
-                    EnemyActive[i] = true;
-                    EnemyPosX[i] = rand() % (WindowWidth - 40);
-                    EnemyPosY[i] = -50; // start above screen
-                    EnemySpeed[i] = 2 + rand() % 3;
-                }
-            }
-
-            // Move enemies and check collisions
-            for (int i = 0; i < MaxEnemies; i++) {
-                if (EnemyActive[i]) {
-                    EnemyPosY[i] += EnemySpeed[i];
-
-                    // Check collision with ship
-                    if (EnemyPosY[i] + 15 > ShipH - 10 && EnemyPosY[i] - 15 < ShipH + 50 &&
-                        EnemyPosX[i] + 15 > ShipW - 20 && EnemyPosX[i] - 15 < ShipW + ShipWidth) {
-                        GameOver = true; // enemy hit the ship
-                    }
-
-                    // Check collision with bullets
-                    for (int j = 0; j < MaximumNumOfBullets; j++) {
-                        if (BulletActive[j]) {
-                            if (BulletPositionY[j] - 5 < EnemyPosY[i] + 15 && BulletPositionY[j] + 5 > EnemyPosY[i] - 15 &&
-                                BulletPositionX[j] > EnemyPosX[i] - 15 && BulletPositionX[j] < EnemyPosX[i] + 15) {
-                                // Enemy hit
+                    for (int j = 0; j < MaximumNumOfBullets; j++)
+                    {
+                        if (BulletActive[j])
+                        {
+                            if (BulletPositionY[j] - 5 < EnemyPosY[i] + 30 && BulletPositionY[j] + 5 > EnemyPosY[i] &&
+                                BulletPositionX[j] > EnemyPosX[i] && BulletPositionX[j] < EnemyPosX[i] + 30)
+                            {
                                 EnemyActive[i] = false;
                                 BulletActive[j] = false;
                                 Score += 10;
@@ -322,24 +198,91 @@ void DemonstrateGraphics()
                     }
 
                     // Remove enemies out of screen
-                    if (EnemyPosY[i] > WindowHieght + 50) {
+                    if (EnemyPosY[i] > WindowHieght + 50)
                         EnemyActive[i] = false;
-                    }
                 }
             }
-
-            // Draw enemies
-            for (int i = 0; i < MaxEnemies; i++) {
-                if (EnemyActive[i]) {
-                    DrawCircle(EnemyPosX[i], EnemyPosY[i], 15, RED);
-                }
-            }
-
-            // Draw score
-            DrawText(TextFormat("Score: %d", Score), 20, 20, 30, WHITE);
         }
 
-        // Draw bullets
+        // --- Player controls ---
+        if (IsKeyDown(KEY_RIGHT) || IsKeyDown(KEY_D))
+            ShipW += ShipSpeed;
+        if (IsKeyDown(KEY_LEFT) || IsKeyDown(KEY_A))
+            ShipW -= ShipSpeed;
+
+        // Keep ship within bounds
+        if (ShipW < 0) ShipW = 0;
+        if (ShipW + ShipWidth > WindowWidth) ShipW = WindowWidth - ShipWidth;
+
+        // --- firing bullets ---
+        if (IsKeyDown(KEY_SPACE) && WaitToFire >= WaitToFireTime)
+        {
+            for (int i = 0; i < MaximumNumOfBullets; i++)
+            {
+                if (!BulletActive[i])
+                {
+                    BulletPositionX[i] = ShipW + ShipWidth / 2;
+                    BulletPositionY[i] = ShipH;
+                    BulletActive[i] = true;
+                    WaitToFire = 0; // reset fire timer
+                    break;
+                }
+            }
+        }
+        WaitToFire++;
+
+        // --- move bullets ---
+        for (int i = 0; i < MaximumNumOfBullets; i++)
+        {
+            if (BulletActive[i])
+            {
+                BulletPositionY[i] -= BulletSpeed;
+                if (BulletPositionY[i] < 0)
+                    BulletActive[i] = false;
+            }
+        }
+
+        // --- Drawing ---
+        BeginDrawing();
+        ClearBackground(grey);
+
+        {
+            int starIndex = 0;
+            while (starIndex < NumberOfStars)
+            {
+                DrawPixel(StarPositionX[starIndex], StarPositionY[starIndex], WHITE);
+                StarPositionY[starIndex] = StarPositionY[starIndex] + 1;
+                if (StarPositionY[starIndex] > WindowHieght)
+                {
+                    StarPositionY[starIndex] = 0;
+                    StarPositionX[starIndex] = rand() % WindowWidth;
+                }
+                starIndex = starIndex + 1;
+            }
+        }
+
+        // draw planets
+        for (int PlanetForLoop = 0; PlanetForLoop < NumberOfPlanetsGoingToFall; PlanetForLoop++)
+        {
+            DrawCircle(PlanetPositionX[PlanetForLoop], PlanetPositionY[PlanetForLoop], PlanetRadius[PlanetForLoop], PlanetFirstColor[PlanetForLoop]);
+            DrawCircle(PlanetPositionX[PlanetForLoop], PlanetPositionY[PlanetForLoop], PlanetRadius[PlanetForLoop] * 0.7, PlanetSecondColors[PlanetForLoop]);
+            DrawCircle(PlanetPositionX[PlanetForLoop], PlanetPositionY[PlanetForLoop], PlanetRadius[PlanetForLoop] * 0.4, PlanetThirdColors[PlanetForLoop]);
+
+            PlanetPositionY[PlanetForLoop] += PlanetFallingSpeed[PlanetForLoop];
+
+            if (PlanetPositionY[PlanetForLoop] - PlanetRadius[PlanetForLoop] > WindowHieght)
+                PlanetPositionY[PlanetForLoop] = -PlanetRadius[PlanetForLoop] - 50;
+        }
+
+        // draw ship
+        DrawRectangle(ShipW - 15, ShipH - 10, 30, 20, BLUE); // main body
+        DrawCircle(ShipW, ShipH - 5, 7, BLUE); // cockpit
+        DrawCircle(ShipW - 20, ShipH + 5, 6, DARKBLUE); // wing left
+        DrawCircle(ShipW + 20, ShipH + 5, 6, DARKBLUE); // wing right
+        DrawCircle(ShipW - 7, ShipH + 12, 5, ORANGE); // engine left
+        DrawCircle(ShipW + 7, ShipH + 12, 5, ORANGE); // engine right
+
+        // draw bullets
         for (int i = 0; i < MaximumNumOfBullets; i++)
         {
             if (BulletActive[i])
@@ -348,7 +291,19 @@ void DemonstrateGraphics()
             }
         }
 
-        // Game Over display
+        // draw enemies
+        for (int i = 0; i < MaxEnemies; i++)
+        {
+            if (EnemyActive[i])
+            {
+                DrawCircle(EnemyPosX[i], EnemyPosY[i], 15, RED);
+            }
+        }
+
+        // draw score
+        DrawText(TextFormat("Score: %d", Score), 20, 20, 30, WHITE);
+
+        // game over
         if (GameOver)
         {
             DrawText("GAME OVER!", WindowWidth / 2 - 150, WindowHieght / 2 - 20, 50, RED);
@@ -358,9 +313,7 @@ void DemonstrateGraphics()
                 // Restart game
                 Score = 0;
                 GameOver = false;
-                for (int i = 0; i < MaxEnemies; i++) {
-                    EnemyActive[i] = false;
-                }
+                for (int i = 0; i < MaxEnemies; i++) EnemyActive[i] = false;
             }
         }
 
@@ -368,9 +321,4 @@ void DemonstrateGraphics()
     }
 
     CloseWindow();
-}
-
-int main()
-{
-    DemonstrateGraphics();
 }
