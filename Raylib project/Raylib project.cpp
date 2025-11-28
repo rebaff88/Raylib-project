@@ -1,9 +1,15 @@
-﻿#include <cstdlib>
+﻿#include<stdio.h>
+#include <cstdlib>
 #include <ctime>
 #include <raylib.h>  
 #include <random> 
 using namespace std;
 //you are going to view our final programming fundamentals group project
+
+
+
+
+
 
 
 void DemonstrateGraphics()
@@ -329,11 +335,18 @@ void DemonstrateGraphics()
 
 
 
-int main()
-{
 
 
-	DemonstrateGraphics();
+		int main()
+		{
 
-}
+		
+			DemonstrateGraphics();
+
+
+
+
+			
+			return 0;
+		}
 
