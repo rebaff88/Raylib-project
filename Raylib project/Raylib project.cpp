@@ -425,6 +425,28 @@ void DemonstrateGraphics()
 
 int main()
 {
+
+
+	cout << "************ Welcome! ************\n";
+	cout << "What You Have To DO:\n";
+	cout << "  Defend your spaceship from incoming enemies and obstacles.\n";
+	cout << "  Shoot enemies to earn points and avoid collisions to stay alive.\n\n";
+	cout << "            For This            :\n";
+	cout << "  Use Arrow Keys to Move \n";
+	cout << "  Spac Key for FIRE!!!!!!!!!!\n";
+
+	
+	
+	cout << "  The game ends when your spaceship collides with an enemy or obstacle.\n";
+	cout << "  Check your score and try to beat it in the next round!\n";
+	
+
+	cout << "************************\n";
+
+
+
+
+
 	string file_name = "highscores.txt";
 
 	string new_name;
