@@ -1,4 +1,5 @@
-﻿#include<stdio.h>
+﻿#include<iostream>
+#include<stdio.h>
 #include <cstdlib>
 #include <ctime>
 #include <raylib.h>  
@@ -36,6 +37,11 @@ void DemonstrateGraphics()
 
 
 
+	// Seed random generator
+	srand(time(0));
+
+
+
 
 
 	//for space ship 
@@ -45,7 +51,7 @@ void DemonstrateGraphics()
 	int ShipHieght = 50;
 	int ShipSpeed = 5; //much fast
 	int ShipALive = 5; //health of player(lives)
-	const int MaxHealth = 5; //max health of player(it will remain same to the end of the code)
+	 int MaxHealth = 5; //max health of player(it will remain same to the end of the code)
 
 
 
@@ -113,7 +119,18 @@ void DemonstrateGraphics()
 
 
 
+	//now for creation of enemies: 
+	const int MaxEnemies = 5;
+	int EnemyX[MaxEnemies];
+	int EnemyY[MaxEnemies];
+	int EnemySpeed[MaxEnemies];
 
+	for (int i = 0; i < MaxEnemies; i++)
+	{
+		EnemyX[i] = GetRandomValue(50, WindowWidth - 50);
+		EnemyY[i] = GetRandomValue(-300, -50);
+		EnemySpeed[i] = GetRandomValue(1, 3);
+	}
 
 
 	bool TheGameHasStarted = false; //the game has not started yet
@@ -241,6 +258,54 @@ void DemonstrateGraphics()
 		}
 
 
+		//now the enemies attacke-etc:
+		// Update enemies
+		for (int i = 0; i < MaxEnemies; i++)
+		{
+			EnemyY[i] += EnemySpeed[i];
+
+			if (EnemyY[i] > WindowHieght + 50)
+			{
+				EnemyY[i] = -50;
+				EnemyX[i] = GetRandomValue(50, WindowWidth - 50);
+			}
+
+			// Draw enemy ship
+			DrawRectangle(EnemyX[i] - 18, EnemyY[i] - 12, 36, 24, MAROON);
+			DrawCircle(EnemyX[i], EnemyY[i] - 3, 8, YELLOW);
+			DrawCircle(EnemyX[i] - 15, EnemyY[i] - 15, 6, MAROON);
+			DrawCircle(EnemyX[i] + 15, EnemyY[i] - 15, 6, MAROON);
+			DrawCircle(EnemyX[i] - 25, EnemyY[i] + 5, 7, MAROON);
+			DrawCircle(EnemyX[i] + 25, EnemyY[i] + 5, 7, MAROON);
+			DrawCircle(EnemyX[i] - 8, EnemyY[i] + 16, 6, ORANGE);
+			DrawCircle(EnemyX[i] + 8, EnemyY[i] + 16, 6, ORANGE);
+
+			// Check collision with player
+			if (EnemyY[i] + 12 > ShipH - 10 && EnemyY[i] - 12 < ShipH + ShipHieght)
+			{
+				if (EnemyX[i] + 18 > ShipW && EnemyX[i] - 18 < ShipW + ShipWidth)
+				{
+					MaxHealth--;
+					EnemyY[i] = -50; // respawn enemy
+				}
+			}
+
+			// Check collision with bullets
+			for (int j = 0; j < MaximumNumOfBullets; j++)
+			{
+				if (BulletActive[j])
+				{
+					if (abs(BulletPositionX[j] - EnemyX[i]) < 20 && abs(BulletPositionY[j] - EnemyY[i]) < 20)
+					{
+						BulletActive[j] = false;
+						EnemyY[i] = -50; // respawn enemy
+						break;
+					}
+				}
+			}
+		}
+
+
 
 
 
@@ -316,6 +381,14 @@ void DemonstrateGraphics()
 		}
 
 
+
+		// Draw health
+		DrawText(TextFormat("Health: %d", MaxHealth), 10, 10, 20, WHITE);
+
+		// make game over message appear if health is zero
+		if (MaxHealth <= 0)
+		{
+			DrawText("GAME OVER!", WindowWidth / 2 - 150, WindowHieght / 2 - 20, 50, RED);
 
 
 
