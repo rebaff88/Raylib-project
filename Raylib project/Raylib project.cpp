@@ -29,12 +29,15 @@ void DemonstrateGraphics()
 
 	InitWindow(WindowWidth, WindowHieght, "Welcome, space shooter");
 	//initializing the game window(with help of a (in) built function)
+	InitAudioDevice();       
+	Music music = LoadMusicStream("C:\\Users\\DELL\\source\\repos\\Raylib project\\x64\\Debug\\SAOUND.mp3");
+
+    PlayMusicStream(music);
+	SetMusicVolume(music, 0.5f);//50PARCENT VOLUME
 
 
 
-
-
-	SetTargetFPS(70);
+	SetTargetFPS(80);
 	//setting the frame rate of the game to 60 fps (speed)
 	//loop will run 60 times per second
 
@@ -140,7 +143,7 @@ void DemonstrateGraphics()
 	while (!TheGameHasStarted && !WindowShouldClose())//the condition is defying
 		//ie the game is started
 	{
-
+		UpdateMusicStream(music);
 
 		BeginDrawing();
 		ClearBackground(grey);
@@ -205,6 +208,10 @@ void DemonstrateGraphics()
 
 	while (WindowShouldClose() == false)
 	{
+
+
+		UpdateMusicStream(music);
+
 
 
 		if (IsKeyDown(KEY_RIGHT) || IsKeyDown(KEY_D)) {
@@ -323,6 +330,10 @@ void DemonstrateGraphics()
 
 
 			{
+
+				
+
+
 				DrawPixel(StarPositionX[starIndex], StarPositionY[starIndex], WHITE);
 				//using a raylib function and pasing parameters;
 
@@ -398,6 +409,11 @@ void DemonstrateGraphics()
 
 		EndDrawing();
 	}
+
+
+	UnloadMusicStream(music);
+	CloseAudioDevice();
+
 
 
 	CloseWindow();
